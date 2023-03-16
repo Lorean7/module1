@@ -30,7 +30,7 @@ class AddWindow(QMainWindow):
             self.combo.addItem(option[1])
             print(option[1])
         self.parent_personal_window = parent
-        self.new_user = NewUserAddWindow(self)
+        self.new_user = NewUserAddWindow(self,None)
         self.setGeometry(600,350,300,200)
         self.setWindowTitle("Добавить заказ")
         self.setCentralWidget(QWidget())
@@ -79,6 +79,8 @@ class AddWindow(QMainWindow):
                 reply = QMessageBox.question(self, 'Челика нет',
                             "Пользователь с таким именем не существует, Добавим?")
                 if reply == QMessageBox.StandardButton.Yes:
+                    self.new_user.FIO_input.setText(name)
+                    self.new_user.FIO_input.setReadOnly(True)
                     self.new_user.show()
                     self.hide()
 

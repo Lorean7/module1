@@ -84,6 +84,7 @@ class DB():
             return False
         
     def remove_order(self,id):
+
         id =int(*id) #из-за кортежа я мучаюсь с типами данных АААААААААААААА
         self.cursor.execute('DELETE FROM orders WHERE id=%s',(id,))
         self.db.commit()

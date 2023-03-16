@@ -18,9 +18,10 @@ from database.database import DB
 import datetime
 
 class NewUserAddWindow(QMainWindow):
-    def __init__(self,parent):
+    def __init__(self,parent,new_user):
         super().__init__()
         self.add_window = parent
+        self.new_user = new_user
         self.DB = DB()
         self.setGeometry(600,300,300,200)
         self.setWindowTitle("Добавьте пользователя")
