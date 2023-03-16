@@ -32,7 +32,7 @@ class DB():
         self.cursor.execute("SELECT id FROM service WHERE name_service=%s",(name_service,))
         id_service = self.cursor.fetchone()
         if self.cursor.fetchone() is None:
-            self.cursor.execute("INSERT INTO orders (id,date,id_service, price,name_user) VALUES (%s,%s,%s,%s,%s)",(id,date, id_service[0], price,name_user))
+            self.cursor.execute("INSERT INTO orders (date,id_service, price,name_user,id_sosud) VALUES (%s,%s,%s,%s,%s)",(date, id_service[0], price,name_user,id))
             self.db.commit()
             print("Order added")
 
@@ -63,13 +63,49 @@ class DB():
         list(data)
         # for item in data:
         #     print(item)
-
         return data
+    
     def get_price_service(self,name):
         
         self.cursor.execute("SELECT price FROM service WHERE name_service=%s",(name,))
         price = self.cursor.fetchone()
         return price[0]
+    
+    def get_order(self,id):
+        print(id)
+        print(type(id))
+        self.cursor.execute("SELECT * FROM orders WHERE id=%s",(int(id),))
+        result = self.cursor.fetchone()
+        if result is not None:
+            
+            print(result)
+            return result
+        else:
+            return False
+        
+    def remove_order(self,id):
+        id =int(*id) #из-за кортежа я мучаюсь с типами данных АААААААААААААА
+        self.cursor.execute('DELETE FROM orders WHERE id=%s',(id,))
+        self.db.commit()
+
+    def update_order(self,id_order,name_user,name_service,price,id_sosud):
+        self.cursor.execute("SELECT id FROM service WHERE name_service=%s",(name_service,))
+        id_service = self.cursor.fetchone()
+        print(id_service[0])
+        print(id_sosud)
+        print(price)
+        print(name_service)
+        print(id_order)
+        
+        result = self.check_user(name_user)
+        if result == True:
+            self.cursor.execute("UPDATE orders SET id_service=%s,price=%s,name_user=%s,id_sosud=%s WHERE id=%s",(id_service[0],price,name_user,id_sosud,id_order))
+            self.db.commit()
+            return True
+        else:
+            return False
+
+
 
 
 

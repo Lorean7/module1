@@ -24,10 +24,11 @@ class AddWindow(QMainWindow):
         super().__init__()
         self.DB = DB()
         options = self.DB.get_all_service()
-        print(options)
+        # print(options)
         self.combo = QComboBox()
         for option in options:
             self.combo.addItem(option[1])
+            print(option[1])
         self.parent_personal_window = parent
         self.new_user = NewUserAddWindow(self)
         self.setGeometry(600,350,300,200)

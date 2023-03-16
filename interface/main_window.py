@@ -20,7 +20,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.DB = DB()
-        self.children_window = PersonalWindow(None,self)
+        self.children_window = PersonalWindow(self)
         self.setCentralWidget(QWidget())
         self.setGeometry(600,300,300,200)
         self.setWindowTitle('Отдел технического контроля ЗАО ')
@@ -78,10 +78,13 @@ class MainWindow(QMainWindow):
         #input_reg
         self.login_reg = QLineEdit()
         self.login_reg.setMaxLength(16)
+        self.login_reg.setPlaceholderText('Введите логин')
         self.FIO_reg = QLineEdit()
         self.FIO_reg.setMaxLength(44)
+        self.FIO_reg.setPlaceholderText('Введите FIO')
         self.FIO_reg.textChanged.connect(lambda: FioValidator(self.FIO_reg,self.FIO_reg.text()))
         self.password_reg = QLineEdit()
+        self.password_reg.setPlaceholderText('Введите пароль')
         self.password_reg.setEchoMode(QLineEdit.EchoMode.Password)
 
 
