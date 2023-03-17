@@ -63,16 +63,19 @@ class NewUserAddWindow(QMainWindow):
         FIO = self.FIO_input.text()
         phone_input = self.phone_input.text()
         email = self.email.text()
-        result = self.DB.add_user(FIO,phone_input,email)
-        if result:
-            QMessageBox.information(self, "Успешно", "Пользователь успешно добавлен")
+        if FIO != '' and phone_input != '' and email != '':
+            result = self.DB.add_user(FIO,phone_input,email)
+            if result:
+                QMessageBox.information(self, "Успешно", "Пользователь успешно добавлен")
+            else:
+                QMessageBox.warning(self, "Ошибка", "УПС что-то пошло не так:) мы уже работаем над этим")
         else:
-            QMessageBox.warning(self, "Ошибка", "УПС что-то пошло не так:) мы уже работаем над этим")
+            QMessageBox.warning(self, "Ошибка", "Не все поля заполнены")
                 
 
     def closeEvent(self):
-        reply = QMessageBox.question(self, 'Message',
-            "Are you sure you want to quit?")
+        reply = QMessageBox.question(self, 'Выход',
+            "Выйти?")
         if reply == QMessageBox.StandardButton.Yes:
             self.add_window.show()
             self.hide()

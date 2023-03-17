@@ -72,7 +72,7 @@ class AddWindow(QMainWindow):
         price = self.DB.get_price_service(name_service)
         name = self.name_user.text()
 
-        if id != '' or name_service != '' or price != '' or name != '':
+        if id != '' and name_service != '' and price != '' and name != '':
             result = self.DB.check_user(str(name))
             if result is not None:
                 date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
@@ -82,14 +82,16 @@ class AddWindow(QMainWindow):
                             "Пользователь с таким именем не существует, Добавим?")
                 if reply == QMessageBox.StandardButton.Yes:
                     self.new_user.FIO_input.setText(name)
-                    #self.new_user.FIO_input.setReadOnly(True)
+                    self.new_user.FIO_input.setReadOnly(True)
                     self.new_user.show()
                     self.hide()
+        else:
+            QMessageBox.warning(self, 'Ошибка', 'Необходимо заполнить поля')
 
                 
 
     def closeEvent(self):
-        reply = QMessageBox.question(self, 'Message',
+        reply = QMessageBox.question(self, 'Выход',
             "Выйти?")
         if reply == QMessageBox.StandardButton.Yes:
             self.parent_personal_window.show()

@@ -128,7 +128,11 @@ class MainWindow(QMainWindow):
             self.btn_mode.setText('Перейти к регистрации')
     #передача текста из полей и вызов функции регистрации для работы с базой данных
     def registration(self):
-        self.DB.registration(self.login_reg.text(), self.password_reg.text(),self.FIO_reg.text(),self.img_info.text())
+        if self.login_reg.text() != '' and self.password_reg.text() != '' and self.FIO_reg.text() !='':
+            self.DB.registration(self.login_reg.text(), self.password_reg.text(),self.FIO_reg.text(),self.img_info.text())
+            QMessageBox.information(self, 'Регистрация', 'Регистрация успешна')
+        else:
+            QMessageBox.warning(self,'error', 'Поля не заполнены')
     #авторизация пользователя . Открытие нового окна
     def auth(self):
         avatar_data = self.DB.auth(self.login_auth.text(), self.password_auth.text())
