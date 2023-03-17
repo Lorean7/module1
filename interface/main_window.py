@@ -6,11 +6,14 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QLineEdit,
     QWidget,
-    QMessageBox
+    QMessageBox,
+    QFileDialog,
+    
 )
 from validators.fio_validator import FioValidator
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtGui import QPixmap
 
 from database.database import DB
 
@@ -86,6 +89,9 @@ class MainWindow(QMainWindow):
         self.password_reg = QLineEdit()
         self.password_reg.setPlaceholderText('Введите пароль')
         self.password_reg.setEchoMode(QLineEdit.EchoMode.Password)
+        self.browse_button = QPushButton("Выбрать файл", self)
+        self.browse_button.clicked.connect(lambda: self.selectImage())
+        self.img_info = QLabel('Файл не выбран')
 
 
         #init group reg
@@ -95,7 +101,11 @@ class MainWindow(QMainWindow):
         self.grid_reg.addWidget(self.password_reg,1,1)
         self.grid_reg.addWidget(QLabel('ФИО'),2,0)
         self.grid_reg.addWidget(self.FIO_reg,2,1)
-        self.grid_reg.addWidget(self.btn_registration,3,1)
+        self.grid_reg.addWidget(QLabel('Загрузить файл'),3,0)
+        self.grid_reg.addWidget(self.browse_button,3,1)
+        self.grid_reg.addWidget(self.img_info,4,1)
+        self.grid_reg.addWidget(self.btn_registration,5,1)
+        
 
         #hide reg group
         self.group_reg.hide()
@@ -118,13 +128,18 @@ class MainWindow(QMainWindow):
             self.btn_mode.setText('Перейти к регистрации')
     #передача текста из полей и вызов функции регистрации для работы с базой данных
     def registration(self):
-        self.DB.registration(self.login_reg.text(), self.password_reg.text(),self.FIO_reg.text())
+        self.DB.registration(self.login_reg.text(), self.password_reg.text(),self.FIO_reg.text(),self.img_info.text())
     #авторизация пользователя . Открытие нового окна
     def auth(self):
-        result = self.DB.auth(self.login_auth.text(), self.password_auth.text())
-        if result == True:
+        avatar_data = self.DB.auth(self.login_auth.text(), self.password_auth.text())
+        if avatar_data is not False:
             QMessageBox.information(self,'accepted', 'Авторизация успешна...')
             self.children_window.login_user.setText(f'Здравстуйте, {self.login_auth.text()}')
+            pixmap = QPixmap()
+            pixmap.loadFromData(avatar_data)
+            self.children_window.avatar.setPixmap(pixmap)
+            self.children_window.avatar.setScaledContents(True)  # Масштабирование изображения по размеру QLabel
+            self.children_window.avatar.setMaximumSize(70, 70)  # Максимальный размер QLabel
             self.children_window.show()
             self.hide()
             
@@ -133,6 +148,12 @@ class MainWindow(QMainWindow):
             QMessageBox.warning(self,'error', 'Неверный логин или пароль')
 
     #контроллер поля 
+
+    def selectImage(self):
+        options = QFileDialog()
+        fileName, _ = QFileDialog.getOpenFileName(self,"Выберите изображение", "","Images (*.png *.xpm *.jpg *.bmp);;All Files (*)")
+        if fileName:
+            self.img_info.setText(fileName)
 
 
             

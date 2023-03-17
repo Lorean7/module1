@@ -11,10 +11,14 @@ class DB():
             )
         self.cursor = self.db.cursor()
 
-    def registration(self,login,password,FIO):
+    def registration(self,login,password,FIO,img_path):
         self.cursor.execute("SELECT * FROM personal WHERE login=%s",(login,))
+        #обработка img  для хранения в бд
+        with open(img_path, 'rb') as f:  # rb - rb - это режим открытия файла для чтения в двоичном режиме.
+            image_data = f.read()
+            print (image_data)
         if self.cursor.fetchone() is None:
-            self.cursor.execute("INSERT INTO personal (login,password,FIO) VALUES (%s,%s,%s)",(login,password,FIO))
+            self.cursor.execute("INSERT INTO personal (login,password,FIO,avatar) VALUES (%s,%s,%s,%s)",(login,password,FIO,image_data))
             self.db.commit()
             print("User added")
         else:
@@ -23,8 +27,11 @@ class DB():
     def auth(self,login,password):
         print('call DB.auth')
         self.cursor.execute("SELECT * FROM personal WHERE login=%s AND password=%s",(login,password))
-        if self.cursor.fetchone() is not None:
-            return True
+        result = self.cursor.fetchone()
+        if result is not None:
+            
+            print(result[4])
+            return result[4]
         else:
             return False
         
@@ -39,10 +46,14 @@ class DB():
     def check_user(self,FIO):
         print('call DB.check_user')
         print(FIO)
-        self.cursor.execute("SELECT * FROM users WHERE FIO=%s",(FIO,))
-        if self.cursor.fetchone() is None:
+        self.cursor.execute("SELECT id FROM users WHERE FIO=%s",(FIO,))
+        result = self.cursor.fetchone()
+        print(f'result= {result}')
+        if result is None:
+            print("User not found")
             return False
         else:
+            print("User found")
             return True
         
     def add_user(self,FIO,telephone,email):

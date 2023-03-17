@@ -27,6 +27,8 @@ class PersonalWindow(QMainWindow):
         self.show_window = None
 
         self.login_user = QLabel()
+        self.avatar = QLabel()
+
         self.setCentralWidget(QWidget())
         self.setWindowTitle("Личный кабинет сотрудника ОТК")
         self.create_gui()
@@ -38,6 +40,7 @@ class PersonalWindow(QMainWindow):
         self.main_grid = QGridLayout()
         self.main_grid.setAlignment(Qt.AlignmentFlag.AlignTop)
 
+
         self.btn_back = QPushButton("Назад")
         self.btn_back.clicked.connect(lambda: self.go_back())
         self.btn_add = QPushButton("Добавить")
@@ -48,7 +51,10 @@ class PersonalWindow(QMainWindow):
         self.btn_show_order.clicked.connect(lambda: self.show_order())
 
 
+
         self.main_grid.addWidget(self.login_user, 0, 0)
+        self.main_grid.addWidget(self.avatar, 0, 1)
+        self.main_grid.setAlignment(self.avatar, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         self.main_grid.addWidget(self.btn_add, 1, 0)
         self.main_grid.addWidget(self.btn_show_order,2,0)
         self.main_grid.addWidget(self.input_id_order,2,1)
