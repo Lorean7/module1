@@ -44,21 +44,15 @@ class DB():
             print("Order added")
 
     def check_user(self,FIO):
-        print('call DB.check_user')
-        print(FIO)
-        self.cursor.execute("SELECT id FROM users WHERE FIO=%s",(FIO,))
+        self.cursor.execute("SELECT * from users WHERE FIO=%s",(FIO,))
         result = self.cursor.fetchone()
-        print(f'result= {result}')
-        if result is None:
-            print("User not found")
-            return False
-        else:
-            print("User found")
-            return True
+        print(result)
+        return result
         
     def add_user(self,FIO,telephone,email):
         self.cursor.execute("SELECT * FROM users WHERE FIO=%s",(FIO,))
-        if self.cursor.fetchone() is None:
+        reslut = self.cursor.fetchone()
+        if reslut is None:
             self.cursor.execute("INSERT INTO users (FIO,telephone,email) VALUES (%s,%s,%s)",(FIO,telephone,email))
             self.db.commit()
             print("User added")

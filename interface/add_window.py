@@ -64,6 +64,8 @@ class AddWindow(QMainWindow):
         self.centralWidget().setLayout(self.main_grid)
 
     def add(self):
+        #reinit db 
+        self.DB =DB()
         print('add')
         id = self.id_input.text()
         name_service = self.combo.currentText()
@@ -71,8 +73,8 @@ class AddWindow(QMainWindow):
         name = self.name_user.text()
 
         if id != '' or name_service != '' or price != '' or name != '':
-            result = self.DB.check_user(FIO=name)
-            if result == True:
+            result = self.DB.check_user(str(name))
+            if result is not None:
                 date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                 self.DB.add_order(id=id,date=date,name_service=name_service,price=int(price),name_user=name)
             else:
@@ -80,7 +82,7 @@ class AddWindow(QMainWindow):
                             "Пользователь с таким именем не существует, Добавим?")
                 if reply == QMessageBox.StandardButton.Yes:
                     self.new_user.FIO_input.setText(name)
-                    self.new_user.FIO_input.setReadOnly(True)
+                    #self.new_user.FIO_input.setReadOnly(True)
                     self.new_user.show()
                     self.hide()
 
@@ -88,7 +90,7 @@ class AddWindow(QMainWindow):
 
     def closeEvent(self):
         reply = QMessageBox.question(self, 'Message',
-            "Are you sure you want to quit?")
+            "Выйти?")
         if reply == QMessageBox.StandardButton.Yes:
             self.parent_personal_window.show()
             self.hide()
