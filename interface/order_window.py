@@ -44,13 +44,15 @@ class OrderWindow(QMainWindow):
             self.btn_update = QPushButton('Изменить')
             self.btn_update.clicked.connect(lambda: self.show_update_order())
 
-            grid_order.addWidget(QLabel(f'Имя клиента: {self.data_order[4]}'),0,0)
-            grid_order.addWidget(QLabel(f'номер услуги: {self.data_order[2]}'),1,0)
-            grid_order.addWidget(QLabel(f'Номер сосуда: {self.data_order[5]}'),2,0)
-            grid_order.addWidget(QLabel(f'Дата: {self.data_order[1]}'),3,0)
-            grid_order.addWidget(QLabel(f'цена: {self.data_order[3]}'),4,0)
-            grid_order.addWidget(self.btn_remove,5,0)
-            grid_order.addWidget(self.btn_update,5,1)
+            grid_order.addWidget(QLabel(f'Имя клиента: {self.data_order[3]}'),0,0)
+            grid_order.addWidget(QLabel(f'номер услуги: {self.data_order[7]}'),1,0)
+            grid_order.addWidget(QLabel(f'Номер сосуда: {self.data_order[4]}'),2,0)
+            grid_order.addWidget(QLabel(f'ID сотрудника: {self.data_order[5]}'),3,0)
+            grid_order.addWidget(QLabel(f'Дата: {self.data_order[1]}'),4,0)
+            grid_order.addWidget(QLabel(f'цена: {self.data_order[2]}'),5,0)
+            
+            grid_order.addWidget(self.btn_remove,7,1)
+            grid_order.addWidget(self.btn_update,6,1)
             
 
             group_order.setLayout(grid_order)
@@ -68,11 +70,11 @@ class OrderWindow(QMainWindow):
             self.hide()
 
     def show_update_order(self):
+        print('show update order')
         update_window = UpdateWindow(self,self.data_order[0])
         update_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         
-        update_window.name_user.setText(self.data_order[4])
-        update_window.id_sosud.setText(self.data_order[5])
-        update_window.id_sosud.setText(self.data_order[5])
+        update_window.name_user.setText(self.data_order[3])
+        update_window.id_sosud.setText(self.data_order[4])
         update_window.show()
         self.hide()

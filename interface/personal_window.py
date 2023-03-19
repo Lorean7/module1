@@ -23,10 +23,9 @@ class PersonalWindow(QMainWindow):
         self.parent = parent
         #data for Order Window
         #childrent window
-        self.add_window = AddWindow(self)
+        self.login_personal = None
         self.show_window = None
-
-        self.login_user = QLabel()
+        self.label_hello_personal = QLabel(f'Здравствуйте, {self.login_personal}')
         self.avatar = QLabel()
 
         self.setCentralWidget(QWidget())
@@ -52,7 +51,7 @@ class PersonalWindow(QMainWindow):
 
 
 
-        self.main_grid.addWidget(self.login_user, 0, 0)
+        self.main_grid.addWidget(self.label_hello_personal, 0, 0)
         self.main_grid.addWidget(self.avatar, 0, 1)
         self.main_grid.setAlignment(self.avatar, Qt.AlignmentFlag.AlignTop | Qt.AlignmentFlag.AlignRight)
         self.main_grid.addWidget(self.btn_add, 1, 0)
@@ -68,6 +67,7 @@ class PersonalWindow(QMainWindow):
         self.parent.show()
 
     def show_add(self):
+        self.add_window = AddWindow(self,self.login_personal)
         self.add_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         self.add_window.show()
 

@@ -138,7 +138,8 @@ class MainWindow(QMainWindow):
         avatar_data = self.DB.auth(self.login_auth.text(), self.password_auth.text())
         if avatar_data is not False:
             QMessageBox.information(self,'accepted', 'Авторизация успешна...')
-            self.children_window.login_user.setText(f'Здравстуйте, {self.login_auth.text()}')
+            self.children_window.login_personal = self.login_auth.text()
+            self.children_window.label_hello_personal.setText(f'Здравстуйте, {self.login_auth.text()}')
             pixmap = QPixmap()
             pixmap.loadFromData(avatar_data)
             self.children_window.avatar.setPixmap(pixmap)

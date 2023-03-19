@@ -35,13 +35,25 @@ class DB():
         else:
             return False
         
-    def add_order(self,id,date, name_service, price,name_user):
+    def add_order(self,id_sosud,date, name_service, price,name_user,name_personal):
         self.cursor.execute("SELECT id FROM service WHERE name_service=%s",(name_service,))
-        id_service = self.cursor.fetchone()
-        if self.cursor.fetchone() is None:
-            self.cursor.execute("INSERT INTO orders (date,id_service, price,name_user,id_sosud) VALUES (%s,%s,%s,%s,%s)",(date, id_service[0], price,name_user,id))
+        response = self.cursor.fetchone()
+        id_service = response[0]
+
+        self.cursor.execute("SELECT id from users WHERE FIO=%s", (name_user,))
+        response = self.cursor.fetchone()
+        id_user = response[0]
+
+        self.cursor.execute("SELECT id from personal WHERE login=%s", (name_personal,))
+        print(name_personal)
+        response = self.cursor.fetchone()
+        id_personal = response[0]
+        if id_service is not None and id_user is not None:
+            self.cursor.execute("INSERT INTO orders (date,id_service, price,name_user,id_sosud,personal_id,users_id) VALUES (%s,%s,%s,%s,%s,%s,%s)",(date, id_service, price,name_user,id_sosud,id_personal,id_user))
             self.db.commit()
             print("Order added")
+        else:
+            print("User or service not found")
 
     def check_user(self,FIO):
         self.cursor.execute("SELECT * from users WHERE FIO=%s",(FIO,))
@@ -94,22 +106,28 @@ class DB():
         self.cursor.execute('DELETE FROM orders WHERE id=%s',(id,))
         self.db.commit()
 
-    def update_order(self,id_order,name_user,name_service,price,id_sosud):
-        self.cursor.execute("SELECT id FROM service WHERE name_service=%s",(name_service,))
+    def update_order(self, id_order, name_user, name_service, price, id_sosud):
+        print('update func called')
+        self.cursor.execute("SELECT id FROM service WHERE name_service=%s", (name_service,))
         id_service = self.cursor.fetchone()
+        if id_service is None:
+            print(f"No service found with name {name_service}")
+            return False
+        
         print(id_service[0])
         print(id_sosud)
         print(price)
-        print(name_service)
         print(id_order)
         
         result = self.check_user(name_user)
-        if result == True:
-            self.cursor.execute("UPDATE orders SET id_service=%s,price=%s,name_user=%s,id_sosud=%s WHERE id=%s",(id_service[0],price,name_user,id_sosud,id_order))
+        if result is not None:
+            self.cursor.execute("UPDATE orders SET id_service=%s, price=%s, name_user=%s, id_sosud=%s WHERE id=%s", 
+                                (id_service[0], price, name_user, id_sosud, id_order))
             self.db.commit()
             return True
         else:
             return False
+
 
 
 
