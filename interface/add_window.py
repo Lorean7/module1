@@ -77,7 +77,7 @@ class AddWindow(QMainWindow):
             result = self.DB.check_user(str(name))
             if result is not None:
                 date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-                self.DB.add_order(id_sosud=id,date=date,name_service=name_service,price=int(price),name_user=name,name_personal=self.login_personal)
+                self.DB.add_order(id_container=id,date=date,name_service=name_service,name_user=name,name_personal=self.login_personal)
             else:
                 reply = QMessageBox.question(self, 'Челика нет',
                             "Пользователь с таким именем не существует, Добавим?")

@@ -26,10 +26,7 @@ class OrderWindow(QMainWindow):
         print(self.parent)
         self.setCentralWidget(QWidget())
         self.DB = DB()
-        self.id_order = id_order
-        print(f'self.id-order{self.id_order}')
-        print(type(self.id_order))
-        self.data_order = self.DB.get_order(self.id_order)
+        self.data_order = self.DB.get_order(id_order)
         self.create_gui()
     
     def create_gui(self):
@@ -37,19 +34,19 @@ class OrderWindow(QMainWindow):
         self.main_layout = QHBoxLayout()
         print('create order window')
         if self.data_order != False:
-            group_order = QGroupBox(f'Заказ № {self.data_order[0]}')
+            group_order = QGroupBox(f"Заказ № {self.data_order['id_order']}")
             grid_order = QGridLayout()
             self.btn_remove = QPushButton('Удалить')
             self.btn_remove.clicked.connect(lambda: self.remove_order())
             self.btn_update = QPushButton('Изменить')
             self.btn_update.clicked.connect(lambda: self.show_update_order())
 
-            grid_order.addWidget(QLabel(f'Имя клиента: {self.data_order[3]}'),0,0)
-            grid_order.addWidget(QLabel(f'номер услуги: {self.data_order[7]}'),1,0)
-            grid_order.addWidget(QLabel(f'Номер сосуда: {self.data_order[4]}'),2,0)
-            grid_order.addWidget(QLabel(f'ID сотрудника: {self.data_order[5]}'),3,0)
-            grid_order.addWidget(QLabel(f'Дата: {self.data_order[1]}'),4,0)
-            grid_order.addWidget(QLabel(f'цена: {self.data_order[2]}'),5,0)
+            grid_order.addWidget(QLabel(f"Имя клиента: {self.data_order['name_user']}"),0,0)
+            grid_order.addWidget(QLabel(f"Название услуги: {self.data_order['name_service']}"),3,0)
+            grid_order.addWidget(QLabel(f"Номер сосуда: {self.data_order['id_container']}"),2,0)
+            grid_order.addWidget(QLabel(f"Имя сотрудника: {self.data_order['name_personal']}"),1,0)
+            grid_order.addWidget(QLabel(f"Дата: {self.data_order['date']}"),4,0)
+            grid_order.addWidget(QLabel(f"Цена: {self.data_order['price']}"),5,0)
             
             grid_order.addWidget(self.btn_remove,7,1)
             grid_order.addWidget(self.btn_update,6,1)
@@ -65,16 +62,16 @@ class OrderWindow(QMainWindow):
     def remove_order(self):
         result = QMessageBox.question(self,'Удаление заказа','Подтверите удаление заказа?')
         if result == QMessageBox.StandardButton.Yes:
-            self.DB.remove_order({self.data_order[0]})
-            QMessageBox.information(self,f'Удаление заказа',f'Заказ№ {self.data_order[0]} УДАЛЕН')
+            self.DB.remove_order({self.data_order['id_order']})
+            QMessageBox.information(self,f'Удаление заказа',f"Заказ№ {self.data_order['id_order']} УДАЛЕН")
             self.hide()
 
     def show_update_order(self):
         print('show update order')
-        update_window = UpdateWindow(self,self.data_order[0])
+        update_window = UpdateWindow(self,self.data_order['id_order'])
         update_window.setWindowModality(Qt.WindowModality.ApplicationModal)
         
-        update_window.name_user.setText(self.data_order[3])
-        update_window.id_sosud.setText(self.data_order[4])
+        update_window.name_user.setText(str(self.data_order['name_user']))
+        update_window.id_sosud.setText(str(self.data_order['id_container']))
         update_window.show()
         self.hide()

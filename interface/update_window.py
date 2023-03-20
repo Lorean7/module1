@@ -61,9 +61,8 @@ class UpdateWindow(QMainWindow):
        
         name_user = self.name_user.text()
         name_service = self.service.currentText()
-        price = self.DB.get_price_service(name_service)
         id_sosud = self.id_sosud.text()
-        respone = self.DB.update_order(self.id_order,name_user,name_service,price,id_sosud)
+        respone = self.DB.update_order(self.id_order,name_user,name_service, id_sosud)
         if respone:
             QMessageBox.information(self,"Данные обновленны","Успешно обновлены данные")
             self.hide()
